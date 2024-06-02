@@ -9,6 +9,10 @@ concurrency:
   group: code-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   reproduction:
     runs-on: ubuntu-latest
