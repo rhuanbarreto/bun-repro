@@ -1,0 +1,32 @@
+name: Reproduction
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: code-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  reproduction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    name: Reproduction
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "1.1.9"
+          - "1.1.10"
+          - "1.1.11"
+          - "1.1.12"
+          - latest
+    steps:
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ matrix.version }}
+      - uses: actions/checkout@v4
+      - name: Run Tests
+        run: bun test
